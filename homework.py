@@ -1,3 +1,4 @@
+import typing
 from dataclasses import dataclass, asdict
 
 
@@ -134,7 +135,7 @@ class Swimming(Training):
                 * self.duration)
 
 
-def read_package(workout_type: str, data: list[int]) -> Training:
+def read_package(workout_type: str, data: typing.List[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
     data_of_training = {'SWM': Swimming, 'RUN': Running, 'WLK': SportsWalking}
     try:
