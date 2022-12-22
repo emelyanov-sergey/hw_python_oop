@@ -49,7 +49,7 @@ class Training:
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        NotImplementedError
+        raise NotImplementedError
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
@@ -64,14 +64,13 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
-    CALORIES_COEF_1: int = 18
-    CALORIES_COEF_2: float = 1.79
+    COEF_1: int = 18
+    COEF_2: float = 1.79
 
     def get_spent_calories(self) -> float:
         """Расчет затраченных калорий"""
         return (
-            (self.CALORIES_COEF_1 * self.get_mean_speed()
-                + self.CALORIES_COEF_2)
+            (self.COEF_1 * self.get_mean_speed() + self.COEF_2)
             * self.weight
             / self.M_IN_KM
             * (self.duration * self.MIN_IN_H)
@@ -94,16 +93,13 @@ class SportsWalking(Training):
 
     def get_spent_calories(self) -> float:
         """Расчет затраченных калорий"""
-        HEIGTH_IN_M: float = self.height / self.CM_IN_M
-        SPEED_IN_MSEC: float = self.get_mean_speed() * self.KMH_IN_MSEC
-        DURATION_IN_H: float = self.duration * self.MIN_IN_H
-
         return (
             self.CALORIES_WEIGHT_MULTIPLIER * self.weight
-            + (SPEED_IN_MSEC ** 2 / HEIGTH_IN_M)
+            + ((self.get_mean_speed() * self.KMH_IN_MSEC) ** 2
+               / (self.height / self.CM_IN_M))
             * self.CALORIES_SPEED_HEIGHT_MULTIPLIER
             * self.weight
-        ) * DURATION_IN_H
+        ) * (self.duration * self.MIN_IN_H)
 
 
 class Swimming(Training):
@@ -138,10 +134,9 @@ class Swimming(Training):
 def read_package(workout_type: str, data: typing.List[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
     data_of_training = {'SWM': Swimming, 'RUN': Running, 'WLK': SportsWalking}
-    try:
-        return data_of_training[workout_type](*data)
-    except KeyError:
-        return (f'Неверный тип тренировки {KeyError}')
+    if workout_type not in data_of_training:
+        raise KeyError(f'Не верный тип тренировки - {workout_type}')
+    return data_of_training[workout_type](*data)
 
 
 def main(training: Training) -> None:
