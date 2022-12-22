@@ -135,7 +135,8 @@ def read_package(workout_type: str, data: typing.List[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
     data_of_training = {'SWM': Swimming, 'RUN': Running, 'WLK': SportsWalking}
     if workout_type not in data_of_training:
-        raise KeyError(f'Не верный тип тренировки - {workout_type}')
+        raise ValueError(f'Не верный тип тренировки - {workout_type}.'
+                         f'Возможный тип тренировки: SWM, RUN или WLK')
     return data_of_training[workout_type](*data)
 
 
