@@ -102,7 +102,7 @@ class CaloriesCalculator
 1. Клонировать репозиторий:
 
    ```python
-   git clone https://github.com/egorcoders/hw_python_oop.git
+   git clone https://github.com/emelyanov-sergey/hw_python_oop.git
    ```
 
 2. Перейти в папку с проектом:
